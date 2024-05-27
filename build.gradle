@@ -222,5 +222,6 @@ shadowJar {
     archiveFileName = jar.archiveFileName
     configurations = [project.configurations.minecraftLibrary]
     relocate 'org.java_websocket', 'lcon.org.java_websocket'
+    relocate 'org.slf4j', 'lcon.org.slf4j'
     finalizedBy 'reobfShadowJar'
 }

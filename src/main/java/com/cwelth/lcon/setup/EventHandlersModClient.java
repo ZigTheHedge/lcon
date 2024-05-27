@@ -1,6 +1,7 @@
 package com.cwelth.lcon.setup;
 
 
+import com.cwelth.lcon.Config;
 import com.cwelth.lcon.LCon;
 import com.cwelth.lcon.server.WSSListener;
 import com.google.gson.Gson;
@@ -45,7 +46,7 @@ public class EventHandlersModClient {
 
             if(LCon.wss == null)
             {
-                LCon.wss = new WSSListener(8115, player);
+                LCon.wss = new WSSListener(Config.PORT.get(), player);
                 LCon.wss.start();
             }
 

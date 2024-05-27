@@ -41,26 +41,24 @@ public class EventHandlersModClient {
         LocalPlayer player = (LocalPlayer) event.player;
         if(player != null)
         {
-            //Test test = new Test();
-
-
-            if(LCon.wss == null)
+            if(Config.ENABLE_MOD.get())
             {
-                LCon.wss = new WSSListener(Config.PORT.get(), player);
-                LCon.wss.start();
-            }
+                if(LCon.wss == null)
+                {
+                    LCon.wss = new WSSListener(Config.PORT.get(), player);
+                    LCon.wss.start();
+                }
 
+            }
         }
     }
 
     @SubscribeEvent
     public static void getChatMessage(ClientChatReceivedEvent event) throws IOException {
-        /*
-        Component cmp = event.getMessage();
-        ComponentContents contents = cmp.getContents();
-
-         */
-        Gson gson = new Gson();
-        LCon.wss.broadcast("200:" + gson.toJson(event.getMessage().getContents().toString()));
+        if(LCon.wss != null)
+        {
+            Gson gson = new Gson();
+            LCon.wss.broadcast("200:" + gson.toJson(event.getMessage().getContents().toString()));
+        }
     }
 }

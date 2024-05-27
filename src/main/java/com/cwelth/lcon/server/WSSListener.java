@@ -6,6 +6,7 @@ import com.netiq.websocket.WebSocketServer;
 
  */
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.ClientCommandHandler;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -25,7 +26,13 @@ public class WSSListener extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-        webSocket.send("200:Welcome to LCon! Have fun! Don't forget to use prefixes with every message you send to me. [chat], [client], [server] are valid prefixes.");
+        webSocket.send("200:Welcome to LCon! Have fun! Don't forget to use prefixes with every message you send to me.");
+        webSocket.send("200:Valid prefixes:");
+        webSocket.send("200:[chat] - send message to Minecraft chat.");
+        webSocket.send("200:[message] - display message for player only.");
+        webSocket.send("200:[client] - execute client-side command.");
+        webSocket.send("200:[server] - execute server-side command.");
+        webSocket.send("201:ready.");
     }
 
     @Override
@@ -41,6 +48,13 @@ public class WSSListener extends WebSocketServer {
             // Send chat
             clearMessage = s.substring(6);
             player.connection.sendChat(clearMessage);
+            return;
+        }
+        if(s.startsWith("[message]"))
+        {
+            // Send chat
+            clearMessage = s.substring(9);
+            player.displayClientMessage(Component.literal(clearMessage), true);
             return;
         }
         if(s.startsWith("[client]"))
@@ -59,7 +73,7 @@ public class WSSListener extends WebSocketServer {
             player.connection.sendCommand(clearMessage);
             return;
         }
-        webSocket.send("400:Error! Send message prefix first! [chat], [client], [server] are valid prefixes.");
+        webSocket.send("400:Error! Send message prefix first! [chat], [message], [client], [server] are valid prefixes.");
     }
 
     @Override

@@ -16,6 +16,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,6 +50,19 @@ public class EventHandlersModClient {
                     LCon.wss.start();
                 }
 
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void logOut(ClientPlayerNetworkEvent.LoggingOut event){
+        if(event.getConnection() == null) return;
+        if(LCon.wss != null) {
+            try {
+                LCon.wss.stop(3, "201:closed.");
+            } catch (InterruptedException e) {
+            } finally {
+                LCon.wss = null;
             }
         }
     }

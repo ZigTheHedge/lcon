@@ -16,11 +16,16 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class WSSListener extends WebSocketServer {
-    private final LocalPlayer player;
+    private LocalPlayer player;
 
     public WSSListener(int port, LocalPlayer player)
     {
         super(new InetSocketAddress(port));
+        this.player = player;
+    }
+
+    public void updatePlayer(LocalPlayer player)
+    {
         this.player = player;
     }
 

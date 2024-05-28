@@ -48,7 +48,8 @@ public class EventHandlersModClient {
                 {
                     LCon.wss = new WSSListener(Config.PORT.get(), player);
                     LCon.wss.start();
-                }
+                } else
+                    LCon.wss.updatePlayer(player);
 
             }
         }

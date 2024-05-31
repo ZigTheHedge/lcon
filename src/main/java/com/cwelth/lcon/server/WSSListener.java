@@ -35,6 +35,7 @@ public class WSSListener extends WebSocketServer {
         webSocket.send("200:Valid prefixes:");
         webSocket.send("200:[chat] - send message to Minecraft chat.");
         webSocket.send("200:[message] - display message for player only.");
+        webSocket.send("200:[system] - display system message in chat (for player only).");
         webSocket.send("200:[client] - execute client-side command.");
         webSocket.send("200:[server] - execute server-side command.");
         webSocket.send("201:ready.");
@@ -57,9 +58,16 @@ public class WSSListener extends WebSocketServer {
         }
         if(s.startsWith("[message]"))
         {
-            // Send chat
+            // Send client message
             clearMessage = s.substring(9);
             player.displayClientMessage(Component.literal(clearMessage), true);
+            return;
+        }
+        if(s.startsWith("[system]"))
+        {
+            // Send player-only chat message
+            clearMessage = s.substring(8);
+            player.sendSystemMessage(Component.literal(clearMessage));
             return;
         }
         if(s.startsWith("[client]"))
@@ -78,7 +86,7 @@ public class WSSListener extends WebSocketServer {
             player.connection.sendCommand(clearMessage);
             return;
         }
-        webSocket.send("400:Error! Send message prefix first! [chat], [message], [client], [server] are valid prefixes.");
+        webSocket.send("400:Error! Send message prefix first! [chat], [message], [system], [client], [server] are valid prefixes.");
     }
 
     @Override
